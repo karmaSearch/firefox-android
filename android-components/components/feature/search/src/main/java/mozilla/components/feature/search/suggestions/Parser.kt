@@ -19,7 +19,7 @@ typealias ResponseParser = (JSONResponse) -> List<String>
 /**
  * Builds a Parser that pulls suggestions out of a given index
  */
-private fun buildJSONArrayParser(resultsIndex: Int): ResponseParser {
+private fun  buildJSONArrayParser(resultsIndex: Int): ResponseParser {
     return { input ->
         JSONArray(input)
             .getJSONArray(resultsIndex)
@@ -78,7 +78,6 @@ internal val defaultResponseParser = buildJSONArrayParser(1)
 internal val azerdictResponseParser = buildJSONObjectParser("suggestions")
 internal val daumResponseParser = buildJSONObjectParser("items")
 internal val qwantResponseParser = buildQwantParser()
-internal val karmaResponseParser = buildKarmaParser()
 
 /**
  * Selects a Parser based on a SearchEngine
@@ -87,6 +86,5 @@ internal fun selectResponseParser(searchEngine: SearchEngine): ResponseParser = 
     "Azerdict" -> azerdictResponseParser
     "다음지도" -> daumResponseParser
     "Qwant" -> qwantResponseParser
-    "karma" -> karmaResponseParser
     else -> defaultResponseParser
 }

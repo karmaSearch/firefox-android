@@ -146,4 +146,14 @@ class ParserTest {
         val expectedResults = listOf("firefox", "firefox download", "firefox browser", "firefox update", "firefox.com")
         assertEquals(expectedResults, results)
     }
+
+    @Test
+    fun `can parse a response from Karma`() {
+        val json = "[\"firefox\",[\"firefox\",\"firefox mozilla\",\"firefox 64 bit\",\"firefox télécharger\",\"firefox en français\"]]"
+
+        val results = defaultResponseParser(json)
+        val expectedResults = listOf("firefox", "firefox mozilla", "firefox 64 bit", "firefox télécharger", "firefox en français")
+        assertEquals(expectedResults, results)
+    }
+
 }
