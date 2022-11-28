@@ -23,6 +23,7 @@ class SearchSuggestionClientTest {
         val GOOGLE_MOCK_RESPONSE: SearchSuggestionFetcher = { "[\"firefox\",[\"firefox\",\"firefox for mac\",\"firefox quantum\",\"firefox update\",\"firefox esr\",\"firefox focus\",\"firefox addons\",\"firefox extensions\",\"firefox nightly\",\"firefox clear cache\"]]" }
         val QWANT_MOCK_RESPONSE: SearchSuggestionFetcher = { "{\"status\":\"success\",\"data\":{\"items\":[{\"value\":\"firefox (video game)\",\"suggestType\":3},{\"value\":\"firefox addons\",\"suggestType\":12},{\"value\":\"firefox\",\"suggestType\":2},{\"value\":\"firefox quantum\",\"suggestType\":12},{\"value\":\"firefox focus\",\"suggestType\":12}],\"special\":[],\"availableQwick\":[]}}" }
         val SERVER_ERROR_RESPONSE: SearchSuggestionFetcher = { "Server error. Try again later" }
+        val KARMA_MOCK_RESPONSE: SearchSuggestionFetcher = { "[\"firefox\",\"firefox (video game)\",\"firefox addons\",\"firefox quantum\",\"firefox focus\"]" }
     }
 
     private val searchEngine = createSearchEngine(
@@ -56,6 +57,24 @@ class SearchSuggestionClientTest {
         val results = client.getSuggestions("firefox")
 
         assertEquals(expectedResults, results)
+    }
+
+    @Test
+    fun `Get a list of results based on a non karma search engine`() {
+        val karma = createSearchEngine(
+            name = "karma",
+            url = "https://localhost?q={searchTerms}",
+            suggestUrl = "https://localhost/suggestions?q={searchTerms}",
+            icon = mock()
+        )
+        val client = SearchSuggestionClient(karma, KARMA_MOCK_RESPONSE)
+
+        runBlocking {
+            val results = client.getSuggestions("firefox")
+            val expectedResults = listOf( "firefox", "firefox (video game)", "firefox addons", "firefox quantum", "firefox focus")
+
+            assertEquals(expectedResults, results)
+        }
     }
 
     @Test(expected = SearchSuggestionClient.ResponseParserException::class)

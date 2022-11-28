@@ -1,0 +1,28 @@
+[
+  {
+    "type": "Act",
+    "duration": "",
+    "mobileImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Save_Okavango_river.webp",
+    "desktopImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/desktop/en/Okavango_river.webp",
+    "title": "Save the Okavango River Basin from Oil Drilling",
+    "description": "Sign an open letter to stop oil and gas drilling by Canadian company ReconAfrica in the Okavango River Basin. Share this action with others!",
+    "action": "Sign the petition !",
+    "link": "https://okavango.rewild.org/",
+    "date": "",
+    "region": "US",
+    "id": 23
+  },
+  {
+    "type": "Act",
+    "duration": "",
+    "mobileImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Protect_marine_habitats.webp",
+    "desktopImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/desktop/en/Tropical_forets.webp",
+    "title": "Protect tropical forest and marine habitats",
+    "description": "Sign the petition to push the United States government to help protect fragile ecosystems around the world.",
+    "action": "Sign the petition !",
+    "link": "https://action.ifaw.org/page/79725/action/1",
+    "date": "",
+    "region": "US",
+    "id": 22
+  }
+]

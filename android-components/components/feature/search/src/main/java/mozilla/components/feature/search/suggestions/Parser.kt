@@ -60,6 +60,17 @@ private fun buildQwantParser(): ResponseParser {
     }
 }
 
+private fun buildKarmaParser(): ResponseParser {
+    return { input ->
+        JSONArray(input)
+            .asSequence()
+            .map { it as? String }
+            .filterNotNull()
+            .toList()
+    }
+}
+
+
 /**
  * The available Parsers
  */
@@ -67,6 +78,7 @@ internal val defaultResponseParser = buildJSONArrayParser(1)
 internal val azerdictResponseParser = buildJSONObjectParser("suggestions")
 internal val daumResponseParser = buildJSONObjectParser("items")
 internal val qwantResponseParser = buildQwantParser()
+internal val karmaResponseParser = buildKarmaParser()
 
 /**
  * Selects a Parser based on a SearchEngine
@@ -75,5 +87,6 @@ internal fun selectResponseParser(searchEngine: SearchEngine): ResponseParser = 
     "Azerdict" -> azerdictResponseParser
     "다음지도" -> daumResponseParser
     "Qwant" -> qwantResponseParser
+    "karma" -> karmaResponseParser
     else -> defaultResponseParser
 }

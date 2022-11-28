@@ -21,10 +21,12 @@ class TopSitesFeature(
     private val view: TopSitesView,
     val storage: TopSitesStorage,
     val config: () -> TopSitesConfig,
+    val searchEngineStartURL: String?,
     private val presenter: TopSitesPresenter = DefaultTopSitesPresenter(
         view,
         storage,
-        config
+        config,
+        searchEngineStartURL
     )
 ) : LifecycleAwareFeature {
 

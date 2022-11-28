@@ -478,3 +478,8 @@ projects:
     description: 'A Gradle plugin to generate code for the Nimbus Feature API.'
     publish: true
     artifact-type: jar
+  service-learnandact:
+    path: components/service/learnandact
+    description: 'A library to communicate with learn and act API'
+    publish: true
+

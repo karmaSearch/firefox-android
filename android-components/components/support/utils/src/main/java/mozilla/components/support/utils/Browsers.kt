@@ -38,6 +38,9 @@ class Browsers private constructor(
     enum class KnownBrowser constructor(
         val packageName: String
     ) {
+        KARMA("com.karmasearch.app"),
+        KARMA_DEBUG("com.karmasearch.app.debug"),
+
         FIREFOX("org.mozilla.firefox"),
 
         FIREFOX_BETA("org.mozilla.firefox_beta"),
@@ -125,6 +128,17 @@ class Browsers private constructor(
      * Is there a Firefox browser installed on this device?
      */
     val hasFirefoxBrandedBrowserInstalled: Boolean = firefoxBrandedBrowser != null
+
+
+    /**
+     * Is KARMA the default browser of the user?
+     */
+    val isKARMADefaultBrowser: Boolean
+        get() =
+            defaultBrowser != null && (
+                defaultBrowser.packageName == KnownBrowser.KARMA.packageName ||
+                    defaultBrowser.packageName == KnownBrowser.KARMA_DEBUG.packageName
+                )
 
     /**
      * Is Firefox (Release, Beta, Nightly) the default browser of the user?

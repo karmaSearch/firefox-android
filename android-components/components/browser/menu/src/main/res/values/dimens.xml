@@ -11,10 +11,11 @@
     <dimen name="mozac_browser_menu_padding_vertical">0dp</dimen>
 
     <!--Menu Item -->
-    <dimen name="mozac_browser_menu_item_text_size">16sp</dimen>
+    <dimen name="mozac_browser_menu_item_text_size">14sp</dimen>
     <dimen name="mozac_browser_menu_item_container_layout_height">48dp</dimen>
-    <dimen name="mozac_browser_menu_item_container_padding_start">16dp</dimen>
-    <dimen name="mozac_browser_menu_item_container_padding_end">16dp</dimen>
+    <dimen name="mozac_browser_menu_item_container_padding_start">10dp</dimen>
+    <dimen name="mozac_browser_menu_item_container_padding_end">10dp</dimen>
+
     <!--Menu Item -->
 
     <!--DynamicWidthRecyclerView -->

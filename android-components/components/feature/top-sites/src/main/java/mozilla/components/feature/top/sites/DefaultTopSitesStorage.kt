@@ -86,7 +86,8 @@ class DefaultTopSitesStorage(
     override suspend fun getTopSites(
         totalSites: Int,
         frecencyConfig: TopSitesFrecencyConfig?,
-        providerConfig: TopSitesProviderConfig?
+        providerConfig: TopSitesProviderConfig?,
+        searchEngineStartURL: String?
     ): List<TopSite> {
         val topSites = ArrayList<TopSite>()
         val pinnedSites = pinnedSitesStorage.getPinnedSites().take(totalSites)
@@ -123,7 +124,7 @@ class DefaultTopSitesStorage(
                     !pinnedSites.hasUrl(it.url) &&
                         !providerTopSites.hasUrl(it.url) &&
                         frecencyConfig.frecencyFilter?.invoke(it) ?: true
-                }
+                }.filter {  if (searchEngineStartURL != null) !it.url.startsWith(searchEngineStartURL, true) else true }
                 .take(numSitesRequired)
 
             topSites.addAll(frecentSites)
