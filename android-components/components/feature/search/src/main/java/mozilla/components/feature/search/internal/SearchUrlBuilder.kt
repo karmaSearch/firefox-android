@@ -6,6 +6,7 @@ package mozilla.components.feature.search.internal
 
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
 import mozilla.components.browser.state.search.OS_SEARCH_ENGINE_TERMS_PARAM
 import mozilla.components.browser.state.search.SearchEngine
 import java.util.Locale
@@ -25,16 +26,18 @@ private const val MOZ_PARAM_OFFICIAL = "{" + "moz:official" + "}"
 private const val OS_PARAM_USER_DEFINED = OS_SEARCH_ENGINE_TERMS_PARAM
 private const val OS_PARAM_INPUT_ENCODING = "{" + "inputEncoding" + "}"
 private const val OS_PARAM_LANGUAGE = "{" + "language" + "}"
+private const val OS_PARAM_ANALYTICS = "{" +"method" + "}"
+
 private const val OS_PARAM_OUTPUT_ENCODING = "{" + "outputEncoding" + "}"
 private const val OS_PARAM_OPTIONAL = "\\{" + "(?:\\w+:)?\\w+?" + "\\}"
 
 internal class SearchUrlBuilder(
     private val searchEngine: SearchEngine
 ) {
-    fun buildSearchUrl(searchTerms: String): String {
+    fun buildSearchUrl(searchTerms: String, origin: String? = null): String {
         // The parser should have put the best URL for this device at the beginning of the list.
         val template = searchEngine.resultUrls[0]
-        return buildUrl(template, searchTerms)
+        return buildUrl(template, searchTerms, origin)
     }
 
     fun buildSuggestionUrl(searchTerms: String): String? {
@@ -42,9 +45,10 @@ internal class SearchUrlBuilder(
         return buildUrl(template, searchTerms)
     }
 
-    private fun buildUrl(template: String, searchTerms: String): String {
+    private fun buildUrl(template: String, searchTerms: String, origin: String? = null): String {
         val templateUri = Uri.decode(template)
-        val urlWithSubstitutions = paramSubstitution(templateUri, Uri.encode(searchTerms))
+
+        val urlWithSubstitutions = paramSubstitution(templateUri, Uri.encode(searchTerms), Uri.encode(origin))
         return normalize(urlWithSubstitutions) // User-entered search engines may need normalization.
     }
 }
@@ -52,7 +56,7 @@ internal class SearchUrlBuilder(
 /**
  * Formats template string with proper parameters. Modeled after ParamSubstitution in nsSearchService.js
  */
-private fun paramSubstitution(template: String, query: String): String {
+private fun paramSubstitution(template: String, query: String, origin: String?): String {
     var result = template
     val locale = Locale.getDefault().toString()
 
@@ -63,6 +67,10 @@ private fun paramSubstitution(template: String, query: String): String {
     result = result.replace(OS_PARAM_USER_DEFINED, query)
     result = result.replace(OS_PARAM_INPUT_ENCODING, "UTF-8")
 
+    origin?.let {
+        result = result.replace(OS_PARAM_ANALYTICS, it)
+    }
+    
     result = result.replace(OS_PARAM_LANGUAGE, locale)
     result = result.replace(OS_PARAM_OUTPUT_ENCODING, "UTF-8")
 

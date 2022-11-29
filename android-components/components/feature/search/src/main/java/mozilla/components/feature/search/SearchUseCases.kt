@@ -67,8 +67,8 @@ class SearchUseCases(
             searchEngine: SearchEngine? = null
         ) {
             val searchUrl = searchEngine?.let {
-                searchEngine.buildSearchUrl(searchTerms)
-            } ?: store.state.search.selectedOrDefaultSearchEngine?.buildSearchUrl(searchTerms)
+                searchEngine.buildSearchUrl(searchTerms, "topbar")
+            } ?: store.state.search.selectedOrDefaultSearchEngine?.buildSearchUrl(searchTerms, "topbar")
 
             if (searchUrl == null) {
                 logger.warn("No default search engine available to perform search")
@@ -136,8 +136,8 @@ class SearchUseCases(
             parentSessionId: String? = null
         ) {
             val searchUrl = searchEngine?.let {
-                searchEngine.buildSearchUrl(searchTerms)
-            } ?: store.state.search.selectedOrDefaultSearchEngine?.buildSearchUrl(searchTerms)
+                searchEngine.buildSearchUrl(searchTerms, "newtab")
+            } ?: store.state.search.selectedOrDefaultSearchEngine?.buildSearchUrl(searchTerms, "newtab")
 
             if (searchUrl == null) {
                 logger.warn("No default search engine available to perform search")

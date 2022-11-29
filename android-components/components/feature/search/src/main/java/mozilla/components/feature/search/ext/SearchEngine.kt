@@ -79,9 +79,9 @@ fun SearchEngine.buildSuggestionsURL(query: String): String? {
 /**
  * Builds a URL to search for the given search terms with this search engine.
  */
-fun SearchEngine.buildSearchUrl(searchTerm: String): String {
+fun SearchEngine.buildSearchUrl(searchTerm: String, origin: String? = null): String {
     val builder = SearchUrlBuilder(this)
-    return builder.buildSearchUrl(searchTerm)
+    return builder.buildSearchUrl(searchTerm, origin)
 }
 
 /**

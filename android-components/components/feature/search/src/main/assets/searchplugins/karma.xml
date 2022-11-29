@@ -13,8 +13,8 @@
 <!-- this is effectively x-moz-phonesearch, but search service expects a text/html entry -->
 <Url type="text/html" method="GET" template="https://karmasearch.org/search">
   <Param name="q" value="{searchTerms}"/>
+  <Param name="method" value="{method}"/>
   <Param name="origin" value="android"/>
-  <Param name="method" value="{method}>"/>
 </Url>
 <!-- tablet search not supported -->
 <SearchForm>https://karmasearch.org</SearchForm>
