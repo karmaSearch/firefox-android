@@ -60,17 +60,6 @@ private fun buildQwantParser(): ResponseParser {
     }
 }
 
-private fun buildKarmaParser(): ResponseParser {
-    return { input ->
-        JSONArray(input)
-            .asSequence()
-            .map { it as? String }
-            .filterNotNull()
-            .toList()
-    }
-}
-
-
 /**
  * The available Parsers
  */

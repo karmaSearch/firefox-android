@@ -118,7 +118,7 @@ object PhotonColors {
     val LightGrey05A60 = Color(0x99FBFBFE)
     val LightGrey10 = Color(0xFFF9F9FB)
     val LightGrey20 = Color(0xFFF0F0F4)
-    val LightGrey30 = Color(0xFFE0E0E6)
+    val LightGrey30 = Color(0xFFE1E1E1)
     val LightGrey40 = Color(0xFFCFCFD8)
     val LightGrey50 = Color(0xFFBFBFC9)
     val LightGrey60 = Color(0xFFAFAFBA)
