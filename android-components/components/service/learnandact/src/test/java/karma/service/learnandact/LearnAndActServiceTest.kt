@@ -22,7 +22,7 @@ class LearnAndActServiceTest {
     }
 
     @Test
-    fun `GIVEN PocketStoriesService WHEN getStories THEN getLearnAndActUsecase should return`() = runBlocking {
+    fun `GIVEN LearnAndActService WHEN getStories THEN getLearnAndActUsecase should return`() = runBlocking {
         val stories = listOf(mock<LearnAndAct>())
         whenever(service.getLearnAndActUsecase.invoke()).thenReturn(stories)
 

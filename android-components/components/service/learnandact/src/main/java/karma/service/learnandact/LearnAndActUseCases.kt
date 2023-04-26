@@ -39,6 +39,30 @@ class LearnAndActUseCases {
         }
     }
 
+    internal inner class PreviousLearnAndAct (
+        @VisibleForTesting
+        internal val context: Context,
+        internal val page: Int
+    ) {
+
+        suspend operator fun invoke():  List<LearnAndAct>  {
+            val client = fetchClient
+            if (client == null) {
+                logger.error("Cannot download new stories. Service has incomplete setup")
+                return emptyList()
+            }
+
+            val pocket = getLearnAndActEndpoint(client)
+            val response = pocket.getLearnAndActBlocs(page)
+            if (response is LearnAndActResponse.Success) {
+
+                val data = response.data.map { it.toLearnAndAct() }
+                return data
+            }
+
+            return emptyList()
+        }
+    }
 
     @VisibleForTesting
     internal fun getLearnAndActRepository(context: Context) = LearnAndActRepository(context)

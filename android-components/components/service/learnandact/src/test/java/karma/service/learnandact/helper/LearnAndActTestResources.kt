@@ -1,6 +1,6 @@
 package karma.service.learnandact.helper
 
-import karma.service.learnandact.api.LearnAndActApi
+import karma.service.learnandact.api.*
 
 
 /**
@@ -8,29 +8,25 @@ import karma.service.learnandact.api.LearnAndActApi
  */
 internal object LearnAndActTestResources {
     val endointLearnAndActResponse = this::class.java.classLoader!!.getResource(
-        "learnandact.json"
+        "learnandact.json",
     )!!.readText()
 
-    val apiExpectedLearnAndAct: List<LearnAndActApi> = listOf(
-        LearnAndActApi(
-            id = 0,
-            title = "Save the Okavango River Basin from Oil Drilling",
-            link = "https://okavango.rewild.org/",
-            mobile_image = "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Save_Okavango_river.webp",
-            duration = "",
-            type = "Act",
-            action = "Sign the petition !",
-            description = "Sign an open letter to stop oil and gas drilling by Canadian company ReconAfrica in the Okavango River Basin. Share this action with others!"
-        ),
-        LearnAndActApi(
-            id = 1,
-            title = "Protect tropical forest and marine habitats",
-            link = "https://action.ifaw.org/page/79725/action/1",
-            mobile_image = "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Protect_marine_habitats.webp",
-            duration = "",
-            type = "Act",
-            action = "Sign the petition !",
-            description = "Sign the petition to push the United States government to help protect fragile ecosystems around the world.",
+    val apiExpectedLearnAndAct: List<LearnAndActApi> = arrayListOf(
+            LearnAndActApi(1410,
+                "act",
+                "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_LOI_20_ANIMAUX_3a1831ce4f.webp",
+            "Faisons mieux entendre la voix des animaux en Europe",
+                "Signez la pétition pour un commissaire européen au bien-être des animaux",
+                "Signer la pétition",
+                "https://www.euforanimals.eu/fr"
+            ),
+        LearnAndActApi(1411,
+            "learn",
+            "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_PLASTIQUE_716185b4b3.webp",
+            "Plastique : idées fausses et fausses bonnes idées, un recap clair, net et proactif",
+            "Recap, clarifications, solutions pour une compréhension des enjeux liés à l'utilisation du plastique.",
+            "Lire l'article",
+            "https://baleinesousgravillon.com/plastique-idees-fausses-et-fausses-bonnes-idees-un-recap-clair-net-et-proactif/"
         )
     )
 }

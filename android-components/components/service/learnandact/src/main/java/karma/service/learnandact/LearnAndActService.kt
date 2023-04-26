@@ -43,4 +43,8 @@ class LearnAndActService(
     suspend fun getLearnAndAct(): List<LearnAndAct> {
         return getLearnAndActUsecase.invoke()
     }
+
+    suspend fun getNextLearnAndAct(page: Int) : List<LearnAndAct> {
+        return useCases.PreviousLearnAndAct(context, page).invoke()
+    }
 }

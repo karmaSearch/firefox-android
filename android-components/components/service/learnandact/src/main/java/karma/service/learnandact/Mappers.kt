@@ -4,23 +4,22 @@ import karma.service.learnandact.api.LearnAndActApi
 import karma.service.learnandact.db.LearnAndActEntity
 
 internal fun LearnAndActApi.toLearnAndAct(): LearnAndAct =
-    LearnAndAct(type = type,
+    LearnAndAct(id = id,
+        type = LearnAndActContentType.valueOf(contentType.uppercase()),
     title = title,
-    description = description,
-    duration = duration,
-    imageUrl = mobile_image,
-    action = action,
-    actionUrl = link)
-
+    description = content,
+    imageUrl = imageUrl,
+    action = destinationUrlLabel,
+    actionUrl = destinationUrl)
 
 /**
  * Map Room entities to the object type that we expose to service clients.
  */
 internal fun LearnAndActEntity.toLearnAndAct(): LearnAndAct =
-    LearnAndAct(type = type,
+    LearnAndAct(id = id,
+        type = LearnAndActContentType.valueOf(type.uppercase()),
         title = title,
         description = description,
-        duration = duration,
         imageUrl = imageUrl,
         action = action,
         actionUrl = actionUrl)
@@ -28,12 +27,12 @@ internal fun LearnAndActEntity.toLearnAndAct(): LearnAndAct =
 
 internal fun LearnAndActApi.toLearnAndActEntity(): LearnAndActEntity =
     LearnAndActEntity(id = id,
-        type = type,
+        type = contentType,
         title = title,
-        description = description,
-        duration = duration,
-        imageUrl = mobile_image,
-        action = action,
-        actionUrl = link)
+        description = content,
+        duration = "",
+        imageUrl = imageUrl,
+        action = destinationUrlLabel,
+        actionUrl = destinationUrl)
 
 

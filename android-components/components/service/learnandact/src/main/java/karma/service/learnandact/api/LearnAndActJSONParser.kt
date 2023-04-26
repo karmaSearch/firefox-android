@@ -1,6 +1,5 @@
 package karma.service.learnandact.api
 
-import androidx.annotation.VisibleForTesting
 import karma.service.learnandact.logger
 import mozilla.components.support.ktx.android.org.json.mapNotNull
 import org.json.JSONArray
@@ -27,13 +26,12 @@ internal class LearnAndActJSONParser {
         LearnAndActApi(
             // These three properties are required for any valid recommendation.
             id = json.getInt("id"),
-            type = json.getString("type"),
-            duration = json.getString("duration"),
-            mobile_image = json.getString("mobileImage"),
+            contentType = json.getString("contentType"),
+            imageUrl = json.getString("imageUrl"),
             title = json.getString("title"),
-            description = json.getString("description"),
-            action = json.getString("action"),
-            link = json.getString("link")
+            content = json.getString("content"),
+            destinationUrlLabel = json.getString("destinationUrlLabel"),
+            destinationUrl = json.getString("destinationUrl")
             )
     } catch (e: JSONException) {
         logger.warn("invalid JSON from the L&A endpoint", e)

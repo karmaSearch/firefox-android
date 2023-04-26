@@ -24,7 +24,7 @@ internal abstract class LearnAndActDatabase : RoomDatabase() {
                 context,
                 LearnAndActDatabase::class.java,
                 DATABASE_NAME
-            )
+            ).fallbackToDestructiveMigration()
                 .build().also {
                     instance = it
                 }

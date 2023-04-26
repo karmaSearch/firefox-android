@@ -10,8 +10,8 @@ internal class LearnAndActEndpoint(
 ) {
 
     @WorkerThread
-    fun getLearnAndActBlocs(): LearnAndActResponse<List<LearnAndActApi>> {
-        val response = rawEndpoint.getLearnAndActBlocs()
+    fun getLearnAndActBlocs(page:Int = 1): LearnAndActResponse<List<LearnAndActApi>> {
+        val response = rawEndpoint.getLearnAndActBlocs(page)
         val blocs = response?.let { jsonParser.jsonToLearnAndApi(it) }
         return LearnAndActResponse.wrap(blocs)
     }

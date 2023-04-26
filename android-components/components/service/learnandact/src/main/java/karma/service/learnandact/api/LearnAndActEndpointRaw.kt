@@ -4,7 +4,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import karma.learnandact.fetchBodyOrNull
 import mozilla.components.concept.fetch.Client
+import mozilla.components.concept.fetch.MutableHeaders
 import mozilla.components.concept.fetch.Request
+import mozilla.components.service.learnandact.BuildConfig
 import java.util.*
 
 internal class LearnAndActEndpointRaw internal constructor(
@@ -16,25 +18,21 @@ internal class LearnAndActEndpointRaw internal constructor(
      * @return The stories recommendations as a raw JSON string or null on error.
      */
     @WorkerThread
-    fun getLearnAndActBlocs(): String? = makeRequest()
+    fun getLearnAndActBlocs(page: Int = 1): String? = makeRequest(page)
 
     /**
      * @return The requested JSON as a String or null on error.
      */
     @WorkerThread // synchronous request.
-    private fun makeRequest(): String? {
-        val locale = Locale.getDefault().toString()
-        val jsonFile = when {
-            locale.contains("fr") -> "learn-and-act-fr.json"
-            locale.contains("es") -> "learn-and-act-es.json"
-            else -> "learn-and-act-en.json"
-        }
-        val request = Request(pocketEndpointUrl+jsonFile)
+    private fun makeRequest(page: Int = 1): String? {
+        val locale = Locale.getDefault().toString().replace("_","-")
+        val request = Request(endpointUrl+locale+"&pageNumber="+page)
+
         return client.fetchBodyOrNull(request)
     }
 
     companion object {
-        private const val pocketEndpointUrl = "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L%26A/json/"
+        private const val endpointUrl = "https://api.karmasearch.org/posts?locale="
         /**
          * Returns a new instance of [PocketEndpointRaw].
          *

@@ -1,28 +1,20 @@
 [
   {
-    "type": "Act",
-    "duration": "",
-    "mobileImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Save_Okavango_river.webp",
-    "desktopImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/desktop/en/Okavango_river.webp",
-    "title": "Save the Okavango River Basin from Oil Drilling",
-    "description": "Sign an open letter to stop oil and gas drilling by Canadian company ReconAfrica in the Okavango River Basin. Share this action with others!",
-    "action": "Sign the petition !",
-    "link": "https://okavango.rewild.org/",
-    "date": "",
-    "region": "US",
-    "id": 23
+    "id": 1410,
+    "title": "Faisons mieux entendre la voix des animaux en Europe",
+    "content": "Signez la pétition pour un commissaire européen au bien-être des animaux",
+    "destinationUrl": "https://www.euforanimals.eu/fr",
+    "destinationUrlLabel": "Signer la pétition",
+    "imageUrl": "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_LOI_20_ANIMAUX_3a1831ce4f.webp",
+    "contentType": "act"
   },
   {
-    "type": "Act",
-    "duration": "",
-    "mobileImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/mobile/en/Protect_marine_habitats.webp",
-    "desktopImage": "https://storage.googleapis.com/learn-and-act-and-images.appspot.com/L&A/images/desktop/en/Tropical_forets.webp",
-    "title": "Protect tropical forest and marine habitats",
-    "description": "Sign the petition to push the United States government to help protect fragile ecosystems around the world.",
-    "action": "Sign the petition !",
-    "link": "https://action.ifaw.org/page/79725/action/1",
-    "date": "",
-    "region": "US",
-    "id": 22
+    "id": 1411,
+    "title": "Plastique : idées fausses et fausses bonnes idées, un recap clair, net et proactif",
+    "content": "Recap, clarifications, solutions pour une compréhension des enjeux liés à l'utilisation du plastique.",
+    "destinationUrl": "https://baleinesousgravillon.com/plastique-idees-fausses-et-fausses-bonnes-idees-un-recap-clair-net-et-proactif/",
+    "destinationUrlLabel": "Lire l'article",
+    "imageUrl": "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_PLASTIQUE_716185b4b3.webp",
+    "contentType": "learn"
   }
 ]
