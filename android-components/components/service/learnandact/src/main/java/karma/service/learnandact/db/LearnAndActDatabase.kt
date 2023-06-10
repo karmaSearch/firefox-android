@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [LearnAndActEntity::class], version = 1)
+@Database(entities = [LearnAndActEntity::class], version = 2)
 internal abstract class LearnAndActDatabase : RoomDatabase() {
     abstract fun learnAndActDao(): LearnAndActDao
 

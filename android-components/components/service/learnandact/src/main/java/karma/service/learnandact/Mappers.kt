@@ -33,6 +33,7 @@ internal fun LearnAndActApi.toLearnAndActEntity(): LearnAndActEntity =
         duration = "",
         imageUrl = imageUrl,
         action = destinationUrlLabel,
-        actionUrl = destinationUrl)
+        actionUrl = destinationUrl,
+        publishedDate = publishedAt.time)
 
 

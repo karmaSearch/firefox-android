@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import karma.service.learnandact.api.LearnAndActApi
 import karma.service.learnandact.db.LearnAndActDatabase
+import karma.service.learnandact.db.LearnAndActEntity
 
 internal class LearnAndActRepository(context: Context) {
     private val database: Lazy<LearnAndActDatabase> = lazy { LearnAndActDatabase.get(context) }
@@ -14,8 +15,9 @@ internal class LearnAndActRepository(context: Context) {
      * Get the current locally persisted list of Pocket recommended articles.
      */
     suspend fun getLearnAndActBlocs(): List<LearnAndAct> {
-        return learnAndActsDao.getLearnAndAct().map {
-            it.toLearnAndAct() }.asReversed()
+        return learnAndActsDao.getLearnAndAct().sortedWith(compareByDescending<LearnAndActEntity> { it.publishedDate }.thenByDescending { it.id })
+        .map {
+            it.toLearnAndAct() }
     }
     /**
      * Replace the current list of locally persisted Pocket recommended articles.

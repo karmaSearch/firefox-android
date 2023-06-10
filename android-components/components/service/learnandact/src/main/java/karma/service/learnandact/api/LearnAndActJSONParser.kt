@@ -1,10 +1,13 @@
 package karma.service.learnandact.api
 
+import android.annotation.SuppressLint
 import karma.service.learnandact.logger
 import mozilla.components.support.ktx.android.org.json.mapNotNull
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 internal class LearnAndActJSONParser {
@@ -22,20 +25,27 @@ internal class LearnAndActJSONParser {
         null
     }
 
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+
     private fun jsonToLearnAndActApi(json: JSONObject): LearnAndActApi? = try {
         LearnAndActApi(
             // These three properties are required for any valid recommendation.
             id = json.getInt("id"),
-            contentType = json.getString("contentType"),
-            imageUrl = json.getString("imageUrl"),
-            title = json.getString("title"),
-            content = json.getString("content"),
-            destinationUrlLabel = json.getString("destinationUrlLabel"),
-            destinationUrl = json.getString("destinationUrl")
-            )
+            contentType = json.optStringNotNull("contentType"),
+            imageUrl = json.optStringNotNull("imageUrl"),
+            title = json.optStringNotNull("title"),
+            content = json.optStringNotNull("content"),
+            destinationUrlLabel = json.optStringNotNull("destinationUrlLabel"),
+            destinationUrl = json.optStringNotNull("destinationUrl"),
+            publishedAt = dateFormat.parse(json.optStringNotNull("publishedAt"))  ?: Date()
+        )
     } catch (e: JSONException) {
         logger.warn("invalid JSON from the L&A endpoint", e)
         null
+    }
+
+   fun JSONObject.optStringNotNull(key: String): String {
+        return if (isNull(key)) "" else getString(key)
     }
 
 }

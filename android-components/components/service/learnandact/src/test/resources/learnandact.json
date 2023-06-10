@@ -4,9 +4,10 @@
     "title": "Faisons mieux entendre la voix des animaux en Europe",
     "content": "Signez la pétition pour un commissaire européen au bien-être des animaux",
     "destinationUrl": "https://www.euforanimals.eu/fr",
-    "destinationUrlLabel": "Signer la pétition",
+    "destinationUrlLabel": null,
     "imageUrl": "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_LOI_20_ANIMAUX_3a1831ce4f.webp",
-    "contentType": "act"
+    "contentType": "act",
+    "publishedAt":"2023-06-01T08:46:48.978Z"
   },
   {
     "id": 1411,
@@ -15,6 +16,7 @@
     "destinationUrl": "https://baleinesousgravillon.com/plastique-idees-fausses-et-fausses-bonnes-idees-un-recap-clair-net-et-proactif/",
     "destinationUrlLabel": "Lire l'article",
     "imageUrl": "https://cms-prod.cellar-c2.services.clever-cloud.com/221012_PLASTIQUE_716185b4b3.webp",
-    "contentType": "learn"
+    "contentType": "learn",
+    "publishedAt":"2023-05-31T08:25:59.847Z"
   }
 ]
