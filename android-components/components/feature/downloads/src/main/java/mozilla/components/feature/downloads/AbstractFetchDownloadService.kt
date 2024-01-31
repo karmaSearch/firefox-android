@@ -34,9 +34,9 @@ import androidx.annotation.ColorRes
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -80,6 +80,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import kotlin.random.Random
+import mozilla.components.support.utils.ext.registerReceiverCompat
 
 /**
  * Service that performs downloads through a fetch [Client] rather than through the native
@@ -96,9 +97,6 @@ abstract class AbstractFetchDownloadService : Service() {
     protected abstract val httpClient: Client
 
     protected open val style: Style = Style()
-
-    @VisibleForTesting
-    internal val broadcastManager by lazy { LocalBroadcastManager.getInstance(this) }
 
     @VisibleForTesting
     internal val context: Context get() = this
@@ -509,7 +507,11 @@ abstract class AbstractFetchDownloadService : Service() {
             addAction(ACTION_OPEN)
         }
 
-        context.registerReceiver(broadcastReceiver, filter)
+        context.registerReceiverCompat(
+            broadcastReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     @VisibleForTesting
@@ -814,7 +816,7 @@ abstract class AbstractFetchDownloadService : Service() {
         intent.putExtra(EXTRA_DOWNLOAD_STATUS, getDownloadJobStatus(downloadState))
         intent.putExtra(EXTRA_DOWNLOAD_ID, downloadState.state.id)
 
-        broadcastManager.sendBroadcast(intent)
+        context.sendBroadcast(intent)
     }
 
     /**

@@ -88,8 +88,8 @@ class FetchDownloadManagerTest {
 
     @Test
     fun `calling tryAgain starts the download again`() {
-        val context: Context = mock()
-        downloadManager = FetchDownloadManager(context, store, MockDownloadService::class, broadcastManager)
+        val context = spy(testContext)
+        downloadManager = FetchDownloadManager(context, store, MockDownloadService::class)
         var downloadStopped = false
 
         downloadManager.onDownloadStopped = { _, _, _ -> downloadStopped = true }
@@ -114,7 +114,7 @@ class FetchDownloadManagerTest {
     @Test
     fun `GIVEN a device that supports scoped storage THEN permissions must not included file access`() {
         downloadManager =
-            spy(FetchDownloadManager(mock(), store, MockDownloadService::class, broadcastManager))
+            spy(FetchDownloadManager(mock(), store, MockDownloadService::class))
 
         doReturn(Build.VERSION_CODES.Q).`when`(downloadManager).getSDKVersion()
 
@@ -124,7 +124,7 @@ class FetchDownloadManagerTest {
     @Test
     fun `GIVEN a device does not supports scoped storage THEN permissions must be included file access`() {
         downloadManager =
-            spy(FetchDownloadManager(mock(), store, MockDownloadService::class, broadcastManager))
+            spy(FetchDownloadManager(mock(), store, MockDownloadService::class))
 
         doReturn(Build.VERSION_CODES.P).`when`(downloadManager).getSDKVersion()
 
@@ -138,7 +138,7 @@ class FetchDownloadManagerTest {
     @Test
     fun `try again should not crash when download does not exist`() {
         val context: Context = mock()
-        downloadManager = FetchDownloadManager(context, store, MockDownloadService::class, broadcastManager)
+        downloadManager = FetchDownloadManager(context, store, MockDownloadService::class)
 
         grantPermissions()
         val id = downloadManager.download(download)!!
@@ -247,7 +247,7 @@ class FetchDownloadManagerTest {
         val intent = Intent(ACTION_DOWNLOAD_COMPLETE)
         intent.putExtra(EXTRA_DOWNLOAD_ID, id)
         intent.putExtra(EXTRA_DOWNLOAD_STATUS, DownloadState.Status.FAILED)
-        broadcastManager.sendBroadcast(intent)
+        testContext.sendBroadcast(intent)
     }
 
     private fun notifyDownloadCompleted(id: String) {
@@ -255,7 +255,7 @@ class FetchDownloadManagerTest {
         intent.putExtra(EXTRA_DOWNLOAD_ID, id)
         intent.putExtra(EXTRA_DOWNLOAD_STATUS, DownloadState.Status.COMPLETED)
 
-        broadcastManager.sendBroadcast(intent)
+        testContext.sendBroadcast(intent)
     }
 
     private fun grantPermissions() {

@@ -13,6 +13,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -33,6 +34,7 @@ import mozilla.components.feature.media.notification.MediaNotification
 import mozilla.components.feature.media.session.MediaSessionCallback
 import mozilla.components.support.base.ids.SharedIdsHelper
 import mozilla.components.support.base.log.logger.Logger
+import mozilla.components.support.utils.ext.registerReceiverCompat
 
 @VisibleForTesting
 internal class BecomingNoisyReceiver(private val controller: MediaSession.Controller?) : BroadcastReceiver() {
@@ -210,7 +212,18 @@ internal class MediaSessionServiceDelegate(
         }
 
         noisyAudioStreamReceiver = BecomingNoisyReceiver(state.mediaSessionState?.controller)
-        context.registerReceiver(noisyAudioStreamReceiver, intentFilter)
+        noisyAudioStreamReceiver?.let {
+            registerBecomingNoisyListener(it)
+        }
+    }
+
+    @VisibleForTesting
+    internal fun registerBecomingNoisyListener(broadcastReceiver: BroadcastReceiver) {
+        context.registerReceiverCompat(
+            broadcastReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     @VisibleForTesting

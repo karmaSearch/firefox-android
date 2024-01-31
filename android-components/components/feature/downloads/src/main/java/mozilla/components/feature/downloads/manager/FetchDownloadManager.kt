@@ -18,7 +18,7 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.P
 import androidx.annotation.VisibleForTesting
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.content.ContextCompat
 import mozilla.components.browser.state.action.DownloadAction
 import mozilla.components.browser.state.state.content.DownloadState
 import mozilla.components.browser.state.state.content.DownloadState.Status
@@ -27,6 +27,7 @@ import mozilla.components.feature.downloads.AbstractFetchDownloadService
 import mozilla.components.feature.downloads.AbstractFetchDownloadService.Companion.EXTRA_DOWNLOAD_STATUS
 import mozilla.components.feature.downloads.ext.isScheme
 import kotlin.reflect.KClass
+import mozilla.components.support.utils.ext.registerReceiverCompat
 
 /**
  * Handles the interactions with [AbstractFetchDownloadService].
@@ -38,7 +39,6 @@ class FetchDownloadManager<T : AbstractFetchDownloadService>(
     private val applicationContext: Context,
     private val store: BrowserStore,
     private val service: KClass<T>,
-    private val broadcastManager: LocalBroadcastManager = LocalBroadcastManager.getInstance(applicationContext),
     override var onDownloadStopped: onDownloadStopped = noop
 ) : BroadcastReceiver(), DownloadManager {
 
@@ -93,7 +93,7 @@ class FetchDownloadManager<T : AbstractFetchDownloadService>(
      */
     override fun unregisterListeners() {
         if (isSubscribedReceiver) {
-            broadcastManager.unregisterReceiver(this)
+            applicationContext.unregisterReceiver(this)
             isSubscribedReceiver = false
         }
     }
@@ -101,7 +101,11 @@ class FetchDownloadManager<T : AbstractFetchDownloadService>(
     private fun registerBroadcastReceiver() {
         if (!isSubscribedReceiver) {
             val filter = IntentFilter(ACTION_DOWNLOAD_COMPLETE)
-            broadcastManager.registerReceiver(this, filter)
+            applicationContext.registerReceiverCompat(
+                this,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
             isSubscribedReceiver = true
         }
     }
