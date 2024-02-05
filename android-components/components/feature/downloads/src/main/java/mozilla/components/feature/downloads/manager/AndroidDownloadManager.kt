@@ -31,6 +31,7 @@ import mozilla.components.concept.fetch.Headers.Names.USER_AGENT
 import mozilla.components.feature.downloads.AbstractFetchDownloadService
 import mozilla.components.feature.downloads.ext.isScheme
 import mozilla.components.support.utils.DownloadUtils
+import mozilla.components.support.utils.ext.getSerializableExtraCompat
 import mozilla.components.support.utils.ext.registerReceiverCompat
 
 typealias SystemDownloadManager = android.app.DownloadManager
@@ -122,9 +123,8 @@ class AndroidDownloadManager(
     override fun onReceive(context: Context, intent: Intent) {
         val downloadID = intent.getStringExtra(EXTRA_DOWNLOAD_ID) ?: ""
         val download = store.state.downloads[downloadID]
-        val downloadStatus =
-            intent.getSerializableExtra(AbstractFetchDownloadService.EXTRA_DOWNLOAD_STATUS)
-                as Status
+        val downloadStatus = intent.getSerializableExtraCompat(AbstractFetchDownloadService.EXTRA_DOWNLOAD_STATUS, Status::class.java)
+            as Status
 
         if (download != null) {
             onDownloadStopped(download, downloadID, downloadStatus)

@@ -20,6 +20,7 @@ import mozilla.components.concept.engine.Engine
 import mozilla.components.concept.engine.permission.SitePermissionsStorage
 import mozilla.components.concept.engine.webnotifications.WebNotification
 import mozilla.components.concept.engine.webnotifications.WebNotificationDelegate
+import mozilla.components.support.base.android.NotificationsDelegate
 import mozilla.components.support.base.ids.SharedIdsHelper
 import mozilla.components.support.base.log.logger.Logger
 import mozilla.components.support.ktx.kotlin.getOrigin
@@ -56,10 +57,10 @@ class WebNotificationFeature(
     @DrawableRes smallIcon: Int,
     private val sitePermissionsStorage: SitePermissionsStorage,
     private val activityClass: Class<out Activity>?,
-    private val coroutineContext: CoroutineContext = Dispatchers.IO
+    private val coroutineContext: CoroutineContext = Dispatchers.IO,
+    private val notificationsDelegate: NotificationsDelegate
 ) : WebNotificationDelegate {
     private val logger = Logger("WebNotificationFeature")
-    private val notificationManager = context.getSystemService<NotificationManager>()
     private val nativeNotificationBridge = NativeNotificationBridge(browserIcons, smallIcon)
 
     init {
@@ -86,18 +87,18 @@ class WebNotificationFeature(
             }
 
             ensureNotificationGroupAndChannelExists()
-            notificationManager?.cancel(webNotification.tag, NOTIFICATION_ID)
+            notificationsDelegate.notificationManagerCompat.cancel(webNotification.tag, NOTIFICATION_ID)
 
             val notification = nativeNotificationBridge.convertToAndroidNotification(
                 webNotification, context, NOTIFICATION_CHANNEL_ID, activityClass,
                 SharedIdsHelper.getNextIdForTag(context, PENDING_INTENT_TAG)
             )
-            notificationManager?.notify(webNotification.tag, NOTIFICATION_ID, notification)
+            notificationsDelegate.notificationManagerCompat.notify(webNotification.tag, NOTIFICATION_ID, notification)
         }
     }
 
     override fun onCloseNotification(webNotification: WebNotification) {
-        notificationManager?.cancel(webNotification.tag, NOTIFICATION_ID)
+        notificationsDelegate.notificationManagerCompat.cancel(webNotification.tag, NOTIFICATION_ID)
     }
 
     private fun ensureNotificationGroupAndChannelExists() {
@@ -110,7 +111,7 @@ class WebNotificationFeature(
             channel.setShowBadge(true)
             channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PRIVATE
 
-            notificationManager?.createNotificationChannel(channel)
+            notificationsDelegate.notificationManagerCompat.createNotificationChannel(channel)
         }
     }
 }

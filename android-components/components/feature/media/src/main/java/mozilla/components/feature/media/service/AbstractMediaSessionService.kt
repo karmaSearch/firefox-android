@@ -13,6 +13,7 @@ import android.os.IBinder
 import androidx.annotation.VisibleForTesting
 import mozilla.components.browser.state.state.SessionState
 import mozilla.components.browser.state.store.BrowserStore
+import mozilla.components.support.base.android.NotificationsDelegate
 import java.lang.ref.WeakReference
 
 /**
@@ -35,7 +36,7 @@ internal class MediaServiceBinder(delegate: MediaSessionDelegate) : Binder() {
  */
 abstract class AbstractMediaSessionService : Service() {
     protected abstract val store: BrowserStore
-
+    protected abstract val notificationsDelegate: NotificationsDelegate
     @VisibleForTesting
     internal var binder: MediaServiceBinder? = null
     @VisibleForTesting
@@ -47,7 +48,8 @@ abstract class AbstractMediaSessionService : Service() {
         delegate = MediaSessionServiceDelegate(
             context = this,
             service = this,
-            store = store
+            store = store,
+            notificationsDelegate = notificationsDelegate,
         ).also {
             binder = MediaServiceBinder(it)
         }

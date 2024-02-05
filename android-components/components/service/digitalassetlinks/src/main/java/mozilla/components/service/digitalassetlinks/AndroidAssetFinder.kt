@@ -18,6 +18,7 @@ import java.security.cert.CertificateEncodingException
 import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import mozilla.components.support.utils.ext.getPackageInfoCompat
 
 /**
  * Get the SHA256 certificate for an installed Android app.
@@ -89,7 +90,7 @@ class AndroidAssetFinder {
     private fun PackageManager.getPackageSignatureInfo(packageName: String): PackageInfo? {
         return try {
             if (SDK_INT >= Build.VERSION_CODES.P) {
-                getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+                getPackageInfoCompat(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
             } else {
                 @Suppress("Deprecation")
                 getPackageInfo(packageName, PackageManager.GET_SIGNATURES)

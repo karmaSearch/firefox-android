@@ -22,6 +22,8 @@ import java.lang.Exception
 import java.lang.NullPointerException
 import java.lang.NumberFormatException
 import java.net.URISyntaxException
+import mozilla.components.support.utils.ext.queryIntentActivitiesCompat
+import mozilla.components.support.utils.ext.resolveActivityCompat
 
 private const val EXTRA_BROWSER_FALLBACK_URL = "browser_fallback_url"
 private const val MARKET_INTENT_URI_PACKAGE_PREFIX = "market://details?id="
@@ -59,7 +61,7 @@ class AppLinksUseCases(
     internal fun findActivities(intent: Intent): List<ResolveInfo> {
         return try {
             context.packageManager
-                .queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
+                .queryIntentActivitiesCompat(intent, PackageManager.GET_RESOLVED_FILTER)
         } catch (e: RuntimeException) {
             Logger("AppLinksUseCases").error("failed to query activities", e)
             emptyList()
@@ -67,7 +69,7 @@ class AppLinksUseCases(
     }
 
     private fun findDefaultActivity(intent: Intent): ResolveInfo? {
-        return context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return context.packageManager.resolveActivityCompat(intent, PackageManager.MATCH_DEFAULT_ONLY)
     }
 
     /**

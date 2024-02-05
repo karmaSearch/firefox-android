@@ -32,9 +32,11 @@ import mozilla.components.feature.media.facts.emitStateStopFact
 import mozilla.components.feature.media.focus.AudioFocus
 import mozilla.components.feature.media.notification.MediaNotification
 import mozilla.components.feature.media.session.MediaSessionCallback
+import mozilla.components.support.base.android.NotificationsDelegate
 import mozilla.components.support.base.ids.SharedIdsHelper
 import mozilla.components.support.base.log.logger.Logger
 import mozilla.components.support.utils.ext.registerReceiverCompat
+import mozilla.components.support.utils.ext.stopForegroundCompat
 
 @VisibleForTesting
 internal class BecomingNoisyReceiver(private val controller: MediaSession.Controller?) : BroadcastReceiver() {
@@ -58,11 +60,10 @@ internal class BecomingNoisyReceiver(private val controller: MediaSession.Contro
 internal class MediaSessionServiceDelegate(
     @get:VisibleForTesting internal var context: Context,
     @get:VisibleForTesting internal val service: AbstractMediaSessionService,
-    @get:VisibleForTesting internal val store: BrowserStore
+    @get:VisibleForTesting internal val store: BrowserStore,
+    @get:VisibleForTesting internal val notificationsDelegate: NotificationsDelegate,
 ) : MediaSessionDelegate {
     private val logger = Logger("MediaSessionService")
-    @VisibleForTesting
-    internal var notificationManager = NotificationManagerCompat.from(context)
     @VisibleForTesting
     internal var notificationHelper = MediaNotification(context, service::class.java)
     @VisibleForTesting
@@ -167,7 +168,10 @@ internal class MediaSessionServiceDelegate(
     internal fun updateNotification(sessionState: SessionState) {
         notificationScope?.launch {
             val notification = notificationHelper.create(sessionState, mediaSession)
-            notificationManager.notify(notificationId, notification)
+            notificationsDelegate.notify(
+                notificationId = notificationId,
+                notification = notification,
+            )
         }
     }
 
@@ -201,7 +205,7 @@ internal class MediaSessionServiceDelegate(
 
     @VisibleForTesting
     internal fun stopForeground() {
-        service.stopForeground(false)
+        service.stopForegroundCompat(false)
         isForegroundService = false
     }
 
@@ -237,6 +241,7 @@ internal class MediaSessionServiceDelegate(
     @VisibleForTesting
     internal fun shutdown() {
         mediaSession.release()
+        notificationsDelegate.notificationManagerCompat.cancel(notificationId)
         service.stopSelf()
     }
 

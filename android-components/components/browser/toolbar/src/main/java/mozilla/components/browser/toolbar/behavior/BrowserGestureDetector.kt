@@ -143,14 +143,14 @@ internal class BrowserGestureDetector(
             previousEvent: MotionEvent?,
             currentEvent: MotionEvent,
             distanceX: Float,
-            distanceY: Float
-        ) -> Unit
+            distanceY: Float,
+        ) -> Unit,
     ) : GestureDetector.SimpleOnGestureListener() {
         override fun onScroll(
             e1: MotionEvent?,
             e2: MotionEvent,
             distanceX: Float,
-            distanceY: Float
+            distanceY: Float,
         ): Boolean {
             onScrolling(e1, e2, distanceX, distanceY)
             return true

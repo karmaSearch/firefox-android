@@ -28,6 +28,8 @@ import mozilla.components.feature.autofill.AutofillConfiguration
 import mozilla.components.feature.autofill.handler.EXTRA_LOGIN_ID
 import mozilla.components.feature.autofill.structure.ParsedStructure
 import mozilla.components.support.utils.PendingIntentUtils
+import android.service.autofill.Field
+import android.service.autofill.Presentations
 
 @RequiresApi(Build.VERSION_CODES.O)
 internal data class LoginDatasetBuilder(
@@ -178,9 +180,25 @@ internal fun Dataset.Builder.setValue(
     presentation: RemoteViews,
     inlinePresentation: InlinePresentation? = null
 ): Dataset.Builder {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && inlinePresentation != null) {
-        this.setValue(id, value, presentation, inlinePresentation)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val fieldBuilder: Field.Builder = Field.Builder()
+        if (value != null) {
+            fieldBuilder.setValue(value)
+        }
+        val presentationsBuilder = Presentations.Builder()
+        presentationsBuilder.setMenuPresentation(presentation)
+
+        if (inlinePresentation != null) {
+            presentationsBuilder.setInlinePresentation(inlinePresentation)
+        }
+
+        fieldBuilder.setPresentations(presentationsBuilder.build())
+        this.setField(id, fieldBuilder.build())
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && inlinePresentation != null) {
+        @Suppress("DEPRECATION")
+        setValue(id, value, presentation, inlinePresentation)
     } else {
-        this.setValue(id, value, presentation)
+        @Suppress("DEPRECATION")
+        setValue(id, value, presentation)
     }
 }

@@ -23,6 +23,7 @@ import mozilla.components.feature.autofill.R
 import mozilla.components.feature.autofill.response.dataset.createInlinePresentation
 import mozilla.components.feature.autofill.structure.ParsedStructure
 import mozilla.components.feature.autofill.ui.AbstractAutofillUnlockActivity
+import android.service.autofill.Presentations
 
 internal data class AuthFillResponseBuilder(
     private val parsedStructure: ParsedStructure,
@@ -101,9 +102,20 @@ internal fun FillResponse.Builder.setAuthentication(
     inlinePresentation: InlinePresentation? = null,
     presentation: RemoteViews
 ): FillResponse.Builder {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && inlinePresentation != null) {
-        this.setAuthentication(ids, authentication, presentation, inlinePresentation)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val presentations: Presentations.Builder = Presentations.Builder()
+        presentations.apply {
+            inlinePresentation?.let {
+                setInlinePresentation(it)
+            }
+            setMenuPresentation(presentation)
+        }
+        setAuthentication(ids, authentication, presentations.build())
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        @Suppress("DEPRECATION")
+        setAuthentication(ids, authentication, presentation, inlinePresentation)
     } else {
+        @Suppress("DEPRECATION")
         this.setAuthentication(ids, authentication, presentation)
     }
 }

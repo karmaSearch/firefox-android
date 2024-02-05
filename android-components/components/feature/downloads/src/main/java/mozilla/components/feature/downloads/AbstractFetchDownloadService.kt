@@ -69,6 +69,7 @@ import mozilla.components.feature.downloads.facts.emitNotificationOpenFact
 import mozilla.components.feature.downloads.facts.emitNotificationPauseFact
 import mozilla.components.feature.downloads.facts.emitNotificationResumeFact
 import mozilla.components.feature.downloads.facts.emitNotificationTryAgainFact
+import mozilla.components.support.base.android.NotificationsDelegate
 import mozilla.components.support.base.log.logger.Logger
 import mozilla.components.support.ktx.kotlin.ifNullOrEmpty
 import mozilla.components.support.ktx.kotlin.sanitizeURL
@@ -81,6 +82,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import kotlin.random.Random
 import mozilla.components.support.utils.ext.registerReceiverCompat
+import mozilla.components.support.utils.ext.stopForegroundCompat
 
 /**
  * Service that performs downloads through a fetch [Client] rather than through the native
@@ -91,6 +93,7 @@ import mozilla.components.support.utils.ext.registerReceiverCompat
 @Suppress("TooManyFunctions", "LargeClass", "ComplexMethod")
 abstract class AbstractFetchDownloadService : Service() {
     protected abstract val store: BrowserStore
+    protected abstract val notificationsDelegate: NotificationsDelegate
 
     private val notificationUpdateScope = MainScope()
 
@@ -384,7 +387,10 @@ abstract class AbstractFetchDownloadService : Service() {
         }
 
         notification?.let {
-            NotificationManagerCompat.from(context).notify(download.foregroundServiceId, it)
+            notificationsDelegate.notify(
+                notificationId = download.foregroundServiceId,
+                notification = it,
+            )
             download.lastNotificationUpdate = System.currentTimeMillis()
         }
     }
@@ -405,7 +411,7 @@ abstract class AbstractFetchDownloadService : Service() {
     internal fun clearAllDownloadsNotificationsAndJobs() {
         val notificationManager = NotificationManagerCompat.from(context)
 
-        stopForeground(true)
+        stopForegroundCompat(true)
         compatForegroundNotificationId = COMPAT_DEFAULT_FOREGROUND_ID
 
         // Before doing any cleaning, we have to stop the notification updater scope.
@@ -550,7 +556,10 @@ abstract class AbstractFetchDownloadService : Service() {
                     style.notificationAccentColor
                 )
             NotificationManagerCompat.from(context).apply {
-                notify(NOTIFICATION_DOWNLOAD_GROUP_ID, notificationGroup)
+                notificationsDelegate.notify(
+                    notificationId = NOTIFICATION_DOWNLOAD_GROUP_ID,
+                    notification = notificationGroup,
+                )
             }
             notificationGroup
         } else {
@@ -566,10 +575,12 @@ abstract class AbstractFetchDownloadService : Service() {
                 style.notificationAccentColor
             )
         compatForegroundNotificationId = downloadJobState.foregroundServiceId
-        NotificationManagerCompat.from(context).apply {
-            notify(compatForegroundNotificationId, notification)
-            downloadJobState.lastNotificationUpdate = System.currentTimeMillis()
-        }
+        notificationsDelegate.notify(
+            notificationId = compatForegroundNotificationId,
+            notification = notification,
+        )
+        downloadJobState.lastNotificationUpdate = System.currentTimeMillis()
+
         return notification
     }
 
@@ -600,7 +611,7 @@ abstract class AbstractFetchDownloadService : Service() {
                 it.foregroundServiceId == compatForegroundNotificationId
             }
             downloadJobState.foregroundServiceId to createCompactForegroundNotification(
-                downloadJobState
+                downloadJobState,
             )
         }
 
@@ -642,7 +653,7 @@ abstract class AbstractFetchDownloadService : Service() {
             if (isSelectedForegroundId && needNewForegroundNotification) {
                 // We need to deselect the actual foreground notification, because while it is
                 // selected the user will not be able to dismiss it.
-                stopForeground(false)
+                stopForegroundCompat(false)
 
                 // Now we need to find a new foreground notification, if needed.
                 val newSelectedForegroundDownload = downloadJobs.values.firstOrNull { it.status == DOWNLOADING }
@@ -659,7 +670,7 @@ abstract class AbstractFetchDownloadService : Service() {
         // swipe the foreground notification.
         val finishedDownloading = downloadJobs.values.toList().all { it.status == COMPLETED }
         if (finishedDownloading) {
-            stopForeground(false)
+            stopForegroundCompat(false)
         }
     }
 
